@@ -6,6 +6,7 @@ from stable_baselines3.common.callbacks import CheckpointCallback
 from TradingGameEnvPos import TradingGameEnv as TradingGameEnv_0
 from TradingGameEnvPos2 import TradingGameEnv as TradingGameEnv_1
 from TradingGameEnvPos3 import TradingGameEnv as TradingGameEnv_2
+from TradingGameEnvPos4 import TradingGameEnv as TradingGameEnv_3
 
 goal_selection_strategy = 'future'
 online_sampling = True
@@ -19,6 +20,8 @@ class Arena:
       TradingGameEnv = TradingGameEnv_1
     elif rules==2:
       TradingGameEnv = TradingGameEnv_2
+    elif rules==3:
+      TradingGameEnv = TradingGameEnv_3
     self.env0 = TradingGameEnv()
     self.env = make_vec_env(lambda: self.env0, n_envs=1)
     self.model = DQN('MlpPolicy', self.env, verbose=1)
@@ -55,7 +58,7 @@ class Arena:
       if str(step) in actions:
         action = [actions[str(step)]]
       obs, reward, done, info = self.env.step(action)
-      print("Step {}\t{}\t{: .6f}\t{}".format(step + 1, self.actionStr(action), reward[0], list(obs[0][-6:])))
+      #print("Step {}\t{}\t{: .6f}\t{}".format(step + 1, self.actionStr(action), reward[0], list(obs[0][-6:])))
 
   def test(self):
     # Test the trained agent

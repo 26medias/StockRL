@@ -8,6 +8,7 @@ class Trainer:
         self.train(0, 1000000, save="models/DQN-step-0")
         self.train(1, 1000000, load="models/DQN-step-0", save="models/DQN-step-1")
         self.train(2, 100000000, load="models/DQN-step-1", save="models/DQN-step-2")
+        self.train(3, 100000000, load="models/DQN-step-2", save="models/DQN-step-3")
 
     def train(self, rules=0, steps=1000000, load=False, save=False):
         arena = Arena(rules=rules, saveName=save)

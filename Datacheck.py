@@ -21,8 +21,8 @@ class Datacheck:
         for file in onlyfiles:
             print("\n\n== "+file+" ==")
             df = pd.read_pickle("./data/"+file)
-            #df = df[df['Open'] != 0]
-            #df.to_pickle("./data/"+file)
+            df = df[df['Open'] != 0]
+            df.to_pickle("./data/"+file)
             print(df.describe())
             #print(df.head(50))
 

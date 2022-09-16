@@ -21,6 +21,7 @@ class TradingGame:
     self.log_sell = []
     self.posProfits = None
     self.histPosValue = np.array([])
+    self.futureRange = 5
   
   def getStepData(self):
     if self.cursor>=self.size:
@@ -34,9 +35,18 @@ class TradingGame:
     else: 
       flatten = np.append(flatten, [0, 0, 0, 0, 0, 0])
     return np.array(flatten).astype(np.float32)
+  
+  def getFutureStepData(self):
+    if self.cursor>=self.size-self.futureRange-1:
+      return np.zeros((5, ))
+    future = self.data.iloc[self.cursor+1:self.cursor+self.futureRange+1].copy()
+    v0 = self.data.iloc[self.cursor]['Open']
+    future = (future-v0)/v0
+    flatten = np.clip(future['Open'].T.to_numpy(), a_max=1, a_min=-1).astype(np.float32).flatten()
+    return np.array(flatten).astype(np.float32)
 
   def step(self):
-    if self.cursor == self.size-2:
+    if self.cursor == self.size-self.futureRange-1:
       self.sell()
     current = self.getCurrent()
     self.log_price.append(current['Open'])
@@ -46,7 +56,7 @@ class TradingGame:
     if self.position>0:
       self.histPosValue = np.append(self.histPosValue, [current['Open']])
     self.cursor = self.cursor + 1
-    if self.cursor >= self.size:
+    if self.cursor >= self.size-self.futureRange:
       return False
     return True
   
